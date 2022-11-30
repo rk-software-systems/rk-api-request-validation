@@ -23,20 +23,25 @@ namespace RKSoftware.Packages.ApiRequestValidation
 
             var parameters = context
                  .ActionDescriptor
-                 .Parameters
+                 .Parameters?
                  .Where(x => x.BindingInfo.BindingSource == BindingSource.Path)
                  .ToList();
 
             var flag = true;
-            foreach (var parameter in parameters)
+
+            if (parameters != null)
             {
-                if (!context.ActionArguments.TryGetValue(parameter.Name, out object value) ||
-                    value == null)
+                foreach (var parameter in parameters)
                 {
-                    flag = false;
-                    break;
+                    if (!context.ActionArguments.TryGetValue(parameter.Name, out object value) ||
+                        value == null)
+                    {
+                        flag = false;
+                        break;
+                    }
                 }
             }
+
             return flag;
         }
 
@@ -56,7 +61,7 @@ namespace RKSoftware.Packages.ApiRequestValidation
 
             var parameter = context
                 .ActionDescriptor
-                .Parameters
+                .Parameters?
                 .FirstOrDefault(x => x.BindingInfo.BindingSource == BindingSource.Body ||
                                      x.BindingInfo.BindingSource == BindingSource.Form);
             var flag = true;
