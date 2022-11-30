@@ -19,6 +19,8 @@
     <PackageProjectUrl>https://github.com/rk-software-systems/rk-api-request-validation</PackageProjectUrl>
     <Version>1.0.0</Version>
     <PackageIcon>company-logo.png</PackageIcon>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
