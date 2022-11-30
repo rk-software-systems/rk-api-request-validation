@@ -12,7 +12,7 @@
     <AnalysisLevel>latest</AnalysisLevel>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Company>RK Software Systems</Company>
-    <Description>This package contains logic that can run API request parameter validators automatically</Description>
+    <Description>This package contains logic that can run API request parameter validators automatically.</Description>
     <RepositoryUrl>https://github.com/rk-software-systems/rk-api-request-validation</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Fluent Validation, RKSoftware</PackageTags>
