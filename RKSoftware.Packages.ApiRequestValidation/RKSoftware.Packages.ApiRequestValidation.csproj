@@ -17,7 +17,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageTags>Fluent Validation, RKSoftware</PackageTags>
     <PackageProjectUrl>https://github.com/rk-software-systems/rk-api-request-validation</PackageProjectUrl>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <PackageIcon>company-logo.png</PackageIcon>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
