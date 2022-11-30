@@ -27,4 +27,4 @@ jobs:
         run: dotnet build RKSoftware.Packages.ApiRequestValidation --configuration Release --no-restore
 
       - name: Push to NuGet repository
-        run: dotnet nuget push ./RKSoftware.Packages.ApiRequestValidation/bin/Release/*.nupkg --skip-duplicate --no-symbols true --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ./RKSoftware.Packages.ApiRequestValidation/bin/Release/*.nupkg --skip-duplicate --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
