@@ -1,32 +1,19 @@
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Globalization;
-using System.Net.Http;
-using System.Reflection;
-using System.Reflection.Metadata;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.ObjectPool;
-using Microsoft.Extensions.Options;
-using Moq;
-using Xunit;
 
 namespace RKSoftware.Packages.ApiRequestValidation.Tests
 {
     public class ApiRequestValidationAttributeTests
     {
+        #region test path parameter
+
         [Fact]
         public async void TestRequestWithoutPathParameter()
         {
@@ -77,7 +64,7 @@ namespace RKSoftware.Packages.ApiRequestValidation.Tests
         }
 
         [Fact]
-        public async void TestRequestWithNullInOneOfTwoPathParameter()
+        public async void TestRequestWithNullInOneOfTwoPathParameters()
         {
             var paramaters = new List<ParameterModel>
             {
@@ -89,7 +76,163 @@ namespace RKSoftware.Packages.ApiRequestValidation.Tests
 
             Assert.IsType<NotFoundResult>(actionExecutingContext.Result);
         }
+        #endregion
 
+        #region test body parameter
+
+        [Fact]
+        public async void TestRequestWhenBodyIsNull()
+        {
+            var paramaters = new List<ParameterModel>
+            {
+                new ParameterModel("model", BindingSource.Body, null)
+            };
+
+            var actionExecutingContext = await GetActionExecutingContext(paramaters);
+
+            Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
+
+            Assert.False(actionExecutingContext.ModelState.IsValid);
+
+            Assert.True(actionExecutingContext.ModelState.First().Value.Errors.First().ErrorMessage == "Body is null.");
+        }
+
+        [Fact]
+        public async void TestRequestWhenBodyHasNonEmptyRequiredProperty()
+        {
+            var paramaters = new List<ParameterModel>
+            {
+                new ParameterModel("model", BindingSource.Body, new FakeInputModel
+                {
+                    SystemName = "test_1"
+                })
+            };
+
+            var actionExecutingContext = await GetActionExecutingContext(paramaters);
+
+            Assert.Null(actionExecutingContext.Result);
+
+            Assert.True(actionExecutingContext.ModelState.IsValid);
+        }
+
+        [Fact]
+        public async void TestRequestWhenBodyHasEmptyRequiredProperty()
+        {
+            var paramaters = new List<ParameterModel>
+            {
+                new ParameterModel("model", BindingSource.Body, new FakeInputModel
+                {
+                    SystemName = null
+                })
+            };
+
+            var actionExecutingContext = await GetActionExecutingContext(paramaters);
+
+            Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
+
+            Assert.False(actionExecutingContext.ModelState.IsValid);
+
+            Assert.True(actionExecutingContext.ModelState.TryGetValue(nameof(FakeInputModel.SystemName), out ModelStateEntry modelStateEntry));
+
+            Assert.NotNull(modelStateEntry);
+
+            Assert.True(modelStateEntry.ValidationState == ModelValidationState.Invalid);
+
+            Assert.Contains(FakeInputModelValidator.SystemNameErrorMessage, modelStateEntry.Errors.Select(x => x.ErrorMessage));
+        }
+
+        [Fact]
+        public async void TestRequestWhenBodyIsSystemType()
+        {
+            var paramaters = new List<ParameterModel>
+            {
+                new ParameterModel("model", BindingSource.Body, "test_1234")
+            };
+
+            var actionExecutingContext = await GetActionExecutingContext(paramaters);
+
+            Assert.Null(actionExecutingContext.Result);
+        }
+        #endregion
+
+        #region test form parameter
+
+        [Fact]
+        public async void TestRequestWhenFormIsNull()
+        {
+            var paramaters = new List<ParameterModel>
+            {
+                new ParameterModel("model", BindingSource.Form, null)
+            };
+
+            var actionExecutingContext = await GetActionExecutingContext(paramaters);
+
+            Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
+
+            Assert.False(actionExecutingContext.ModelState.IsValid);
+
+            Assert.True(actionExecutingContext.ModelState.First().Value.Errors.First().ErrorMessage == "Form is null.");
+        }
+
+        [Fact]
+        public async void TestRequestWhenFormHasNonEmptyRequiredProperty()
+        {
+            var paramaters = new List<ParameterModel>
+            {
+                new ParameterModel("model", BindingSource.Form, new FakeInputModel
+                {
+                    SystemName = "test_1"
+                })
+            };
+
+            var actionExecutingContext = await GetActionExecutingContext(paramaters);
+
+            Assert.Null(actionExecutingContext.Result);
+
+            Assert.True(actionExecutingContext.ModelState.IsValid);
+        }
+
+        [Fact]
+        public async void TestRequestWhenFormHasEmptyRequiredProperty()
+        {
+            var paramaters = new List<ParameterModel>
+            {
+                new ParameterModel("model", BindingSource.Form, new FakeInputModel
+                {
+                    SystemName = null
+                })
+            };
+
+            var actionExecutingContext = await GetActionExecutingContext(paramaters);
+
+            Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
+
+            Assert.False(actionExecutingContext.ModelState.IsValid);
+
+            Assert.True(actionExecutingContext.ModelState.TryGetValue(nameof(FakeInputModel.SystemName), out ModelStateEntry modelStateEntry));
+
+            Assert.NotNull(modelStateEntry);
+
+            Assert.True(modelStateEntry.ValidationState == ModelValidationState.Invalid);
+
+            Assert.Contains(FakeInputModelValidator.SystemNameErrorMessage, modelStateEntry.Errors.Select(x => x.ErrorMessage));
+        }
+
+        [Fact]
+        public async void TestRequestWhenFormIsSystemType()
+        {
+            var paramaters = new List<ParameterModel>
+            {
+                new ParameterModel("model", BindingSource.Form, "test_1234")
+            };
+
+            var actionExecutingContext = await GetActionExecutingContext(paramaters);
+
+            Assert.Null(actionExecutingContext.Result);
+        }
+        #endregion
+
+        #region helpers
         private async Task<ActionExecutingContext> GetActionExecutingContext(List<ParameterModel>? parameters)
         {
 
@@ -109,7 +252,7 @@ namespace RKSoftware.Packages.ApiRequestValidation.Tests
             };
 
             var actionContext = new ActionContext(
-                new DefaultHttpContext(),
+                GetDefaultHttpContext(),
                 new RouteData(),
                 actionDescriptor);
 
@@ -143,64 +286,18 @@ namespace RKSoftware.Packages.ApiRequestValidation.Tests
             return actionExecutingContext;
         }
 
+        private DefaultHttpContext GetDefaultHttpContext()
+        {
+            var services = new ServiceCollection();
+            services.AddScoped<IValidator<FakeInputModel>, FakeInputModelValidator>();
+            var serviceProvider = services.BuildServiceProvider();
+            var httpContext = new DefaultHttpContext
+            {
+                RequestServices = serviceProvider
+            };
+            return httpContext;
+        }
 
-        //public async void Common()
-        //{
-        //    var services = new ServiceCollection();
-        //    services.AddSingleton<ILoggerFactory, NullLoggerFactory>();
-        //    services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
-        //    services.AddMvcCore();
-        //    services.AddOptions();
-        //    var serviceProvider = services.BuildServiceProvider();
-
-        //    var options = serviceProvider.GetService<IOptions<MvcOptions>>();
-        //    var compositeDetailsProvider = new DefaultCompositeMetadataDetailsProvider(new List<IMetadataDetailsProvider>());
-        //    var metadataProvider = new DefaultModelMetadataProvider(compositeDetailsProvider);
-        //    var modelBinderFactory = new ModelBinderFactory(metadataProvider, options, serviceProvider);
-
-        //    var parameterBinder = new ParameterBinder(
-        //        metadataProvider,
-        //        modelBinderFactory,
-        //        new Mock<IObjectModelValidator>().Object,
-        //        options,
-        //        NullLoggerFactory.Instance);
-
-        //    var httpContext = new DefaultHttpContext
-        //    {
-        //        RequestServices = serviceProvider // You must set this otherwise BinderTypeModelBinder will not resolve the specified type
-        //    };
-
-        //    var parameter = new ParameterDescriptor
-        //    {
-        //        Name = "id",
-        //        BindingInfo = bindingInfo,
-        //        ParameterType = typeof(string),
-        //    };
-
-        //    var modelMetadata = metadataProvider.GetMetadataForType(parameter.ParameterType);
-        //    var routeDictionary = new RouteValueDictionary();
-        //    routeDictionary.Add("id1", "test1234567");
-        //    var valueProvider = new RouteValueProvider(BindingSource.Path, routeDictionary);
-        //    var modelBinder = modelBinderFactory.CreateBinder(new ModelBinderFactoryContext()
-        //    {
-        //        BindingInfo = parameter.BindingInfo,
-        //        Metadata = modelMetadata,
-        //        CacheToken = parameter
-        //    });
-
-        //    var modelBindingResult = await parameterBinder.BindModelAsync(
-        //        controllerContext,
-        //        modelBinder,
-        //        valueProvider,
-        //        parameter,
-        //        modelMetadata,
-        //        value: null);
-
-        //    var controller = new FakeController
-        //    {
-        //        ControllerContext = controllerContext
-        //    };            
-        //}
-
+        #endregion
     }
 }

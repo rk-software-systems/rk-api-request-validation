@@ -20,7 +20,7 @@ namespace RKSoftware.Packages.ApiRequestValidation
 
             if (next == null)
             {
-                throw new ArgumentNullException(nameof(context));
+                throw new ArgumentNullException(nameof(next));
             }
 
             if (!context.ArePathParametersValid())
