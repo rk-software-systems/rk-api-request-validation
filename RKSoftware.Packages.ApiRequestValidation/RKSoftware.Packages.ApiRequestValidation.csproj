@@ -10,7 +10,23 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisMode>AllEnabledByDefault</AnalysisMode>
     <AnalysisLevel>latest</AnalysisLevel>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Company>RK Software Systems</Company>
+    <Description>This package contains logic that can run API request parameter validators automatically</Description>
+    <RepositoryUrl>https://github.com/rk-software-systems/rk-api-request-validation</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Fluent Validation, RKSoftware</PackageTags>
+    <PackageProjectUrl>https://github.com/rk-software-systems/rk-api-request-validation</PackageProjectUrl>
+    <Version>1.0.0</Version>
+    <PackageIcon>company-logo.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\company-logo.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.4.0" />

@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RKSoftware.Packages.ApiRequ
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{588A00CC-95C4-4B50-AB37-E5A7DC057D15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RKSoftware.Packages.ApiRequestValidation.Tests", "Tests\RKSoftware.Packages.ApiRequestValidation.Tests\RKSoftware.Packages.ApiRequestValidation.Tests.csproj", "{B78E6595-4D8F-4D21-ADFF-C61EF2DB7F34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RKSoftware.Packages.ApiRequestValidation.Tests", "Tests\RKSoftware.Packages.ApiRequestValidation.Tests\RKSoftware.Packages.ApiRequestValidation.Tests.csproj", "{B78E6595-4D8F-4D21-ADFF-C61EF2DB7F34}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4A317E88-24CA-47A5-A867-41338A3ABD87}"
+	ProjectSection(SolutionItems) = preProject
+		company-logo.png = company-logo.png
+		.github\workflows\dotnet-package-publish.yml = .github\workflows\dotnet-package-publish.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
