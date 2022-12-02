@@ -92,7 +92,7 @@ namespace RKSoftware.Packages.ApiRequestValidation.Tests
 
             Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
 
-            Assert.True(actionExecutingContext.ModelState.IsValid);
+            Assert.False(actionExecutingContext.ModelState.IsValid);
 
             Assert.True(actionExecutingContext.ModelState.First().Value.Errors.First().ErrorMessage == "Body is null.");
         }
