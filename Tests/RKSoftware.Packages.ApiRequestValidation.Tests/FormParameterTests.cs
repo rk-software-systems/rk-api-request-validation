@@ -19,7 +19,7 @@ public class FormParameterTests
 
         Assert.False(actionExecutingContext.ModelState.IsValid);
 
-        Assert.True(actionExecutingContext.ModelState.First().Value.Errors.First().ErrorMessage == "Form is null.");
+        Assert.True(actionExecutingContext.ModelState.First().Value?.Errors.First().ErrorMessage == "Form is null.");
     }
 
     [Fact]
@@ -57,7 +57,7 @@ public class FormParameterTests
 
         Assert.False(actionExecutingContext.ModelState.IsValid);
 
-        Assert.True(actionExecutingContext.ModelState.TryGetValue(nameof(FakeInputModel.SystemName), out ModelStateEntry modelStateEntry));
+        Assert.True(actionExecutingContext.ModelState.TryGetValue(nameof(FakeInputModel.SystemName), out ModelStateEntry? modelStateEntry));
 
         Assert.NotNull(modelStateEntry);
 

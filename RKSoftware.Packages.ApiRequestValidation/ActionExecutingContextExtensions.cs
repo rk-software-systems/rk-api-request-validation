@@ -50,7 +50,7 @@ public static class ActionExecutingContextExtensions
     /// <param name="cancellation">Propagates notification that operations should be canceled.</param>
     /// <returns>Returns true, if API request body or form is valid.</returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public static async Task<bool> AreBodyFormAndQueryParametersValid(this ActionExecutingContext context, CancellationToken cancellation = new CancellationToken())
+    public static async Task<bool> AreBodyFormAndQueryModelsValid(this ActionExecutingContext context, CancellationToken cancellation = new CancellationToken())
     {
         ArgumentNullException.ThrowIfNull(context, nameof(context));
 

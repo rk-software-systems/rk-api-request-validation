@@ -27,7 +27,7 @@ public sealed class ApiRequestValidationAttribute : Attribute, IAsyncActionFilte
         {
             context.Result = ((ControllerBase)context.Controller).NotFound();
         }
-        else if (!await context.AreBodyFormAndQueryParametersValid())
+        else if (!await context.AreBodyFormAndQueryModelsValid())
         {
             context.Result = ((ControllerBase)context.Controller).ValidationProblem();
         }

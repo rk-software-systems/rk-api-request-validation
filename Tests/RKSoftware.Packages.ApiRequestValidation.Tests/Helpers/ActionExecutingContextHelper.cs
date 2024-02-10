@@ -27,7 +27,7 @@ internal class ActionExecutingContextHelper
 
         var actionDescriptor = new ControllerActionDescriptor
         {
-            Parameters = parameterDescriptors
+            Parameters = parameterDescriptors ?? []
         };
 
         var actionContext = new ActionContext(
@@ -70,6 +70,9 @@ internal class ActionExecutingContextHelper
     {
         var services = new ServiceCollection();
         services.AddScoped<IValidator<FakeInputModel>, FakeInputModelValidator>();
+        services.AddScoped<IValidator<FakeListModel>, FakeListModelValidator>();
+        services.AddScoped<IValidator<FakeListItemModel>, FakeListItemModelValidator>();
+        services.AddScoped<ICustomService, CustomService>();
         services.AddMvcCore();
         var serviceProvider = services.BuildServiceProvider();
         var httpContext = new DefaultHttpContext
