@@ -16,7 +16,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
-    <Version>8.0.1-beta.1</Version>
+    <Version>8.0.1-preview.1</Version>
   </PropertyGroup>
 
   <PropertyGroup>
