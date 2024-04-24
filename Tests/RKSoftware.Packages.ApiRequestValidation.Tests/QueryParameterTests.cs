@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace RKSoftware.Packages.ApiRequestValidation.Tests;
@@ -8,9 +9,10 @@ public class QueryParameterTests
     [Fact]
     public async void TestRequestWhenQueryIsNull()
     {
-        var paramaters = new List<ParameterModel>
+        ParameterModel? query = null;
+        var paramaters = new List<ParameterModel<ParameterModel?>>
         {
-            new("model", BindingSource.Query, null)
+            new("model", BindingSource.Query, query)
         };
 
         var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
@@ -19,13 +21,29 @@ public class QueryParameterTests
 
         Assert.False(actionExecutingContext.ModelState.IsValid);
 
-        Assert.True(actionExecutingContext.ModelState.First().Value?.Errors.First().ErrorMessage == "Query is null.");
+        Assert.True(actionExecutingContext.ModelState.First().Value?.Errors.First().ErrorMessage == "Query object is null.");
+    }
+
+    [Fact]
+    public async void TestRequestWhenQueryIsSystemTypeAndNull()
+    {
+        int? query = null;
+        var paramaters = new List<ParameterModel<int?>>
+        {
+            new("model", BindingSource.Query, query)
+        };
+
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+
+        Assert.True(actionExecutingContext.ModelState.IsValid);
+
+        Assert.Null(actionExecutingContext.Result);
     }
 
     [Fact]
     public async void TestRequestWhenQueryHasNonEmptyRequiredProperty()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<FakeInputModel>>
         {
             new("model", BindingSource.Query, new FakeInputModel
             {
@@ -43,7 +61,7 @@ public class QueryParameterTests
     [Fact]
     public async void TestRequestWhenQueryHasEmptyRequiredProperty()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<FakeInputModel>>
         {
             new("model", BindingSource.Query, new FakeInputModel
             {
@@ -69,7 +87,7 @@ public class QueryParameterTests
     [Fact]
     public async void TestRequestWhenQueryIsSystemType()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<string>>
         {
             new("model", BindingSource.Query, "test_1234")
         };
@@ -82,7 +100,7 @@ public class QueryParameterTests
     [Fact]
     public async void TestRequestWhenQueryHasNonEmptyRequiredPropertyTogetherWithValidBody()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<FakeInputModel>>
         {
              new("modelBody", BindingSource.Body, new FakeInputModel
             {
@@ -104,7 +122,7 @@ public class QueryParameterTests
     [Fact]
     public async void TestRequestWhenQueryHasEmptyRequiredPropertyTogetherWithValidBody()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<FakeInputModel>>
         {
             new("modelBody", BindingSource.Body, new FakeInputModel
             {
@@ -134,7 +152,7 @@ public class QueryParameterTests
     [Fact]
     public async void TestRequestWhenQueryHasNonEmptyRequiredPropertyTogetherWithValidForm()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<FakeInputModel>>
         {
              new("modelForm", BindingSource.Form, new FakeInputModel
             {
@@ -156,7 +174,7 @@ public class QueryParameterTests
     [Fact]
     public async void TestRequestWhenQueryHasEmptyRequiredPropertyTogetherWithValidForm()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<FakeInputModel>>
         {
             new("modelForm", BindingSource.Body, new FakeInputModel
             {

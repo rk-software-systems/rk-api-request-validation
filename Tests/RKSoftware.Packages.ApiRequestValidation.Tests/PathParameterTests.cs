@@ -8,7 +8,7 @@ public class PathParameterTests
     [Fact]
     public async void TestRequestWithoutPathParameter()
     {
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(null);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext<object>(null);
 
         Assert.Null(actionExecutingContext.Result);
     }
@@ -16,7 +16,7 @@ public class PathParameterTests
     [Fact]
     public async void TestRequestWithPathParameter()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<string>>
         {
             new("id", BindingSource.Path, "test12345")
             
@@ -30,10 +30,10 @@ public class PathParameterTests
     [Fact]
     public async void TestRequestWithTwoPathParameters()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<string>>
         {
-            new ParameterModel("id", BindingSource.Path, "test_1"),
-            new ParameterModel("childId", BindingSource.Path, "test_2")
+            new ParameterModel<string>("id", BindingSource.Path, "test_1"),
+            new ParameterModel<string>("childId", BindingSource.Path, "test_2")
         };
 
         var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
@@ -44,7 +44,7 @@ public class PathParameterTests
     [Fact]
     public async void TestRequestWithNullInPathParameter()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<string?>>
         {
             new("id", BindingSource.Path, null)
         };
@@ -57,7 +57,7 @@ public class PathParameterTests
     [Fact]
     public async void TestRequestWithNullInOneOfTwoPathParameters()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<string?>>
         {
             new("id", BindingSource.Path, null),
             new("childId", BindingSource.Path, "test_2")

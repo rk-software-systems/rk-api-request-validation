@@ -7,7 +7,7 @@ public class BodyWithListParameterTest
     [Fact]
     public async void TestRequestWhenBodyHasNonEmptyRequiredProperty()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<FakeListModel>>
         {
             new("model", BindingSource.Body, new FakeListModel
             {
@@ -31,7 +31,7 @@ public class BodyWithListParameterTest
     [Fact]
     public async void TestRequestWhenBodyHasEmptyRequiredProperty()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<FakeListModel>>
         {
             new("model", BindingSource.Body, new FakeListModel
             {
@@ -57,7 +57,7 @@ public class BodyWithListParameterTest
     [Fact]
     public async void TestRequestWhenBodyHasEmptyRequiredChildProperty()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<FakeListModel>>
         {
             new("model", BindingSource.Body, new FakeListModel
             {

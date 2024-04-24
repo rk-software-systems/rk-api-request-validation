@@ -12,7 +12,7 @@ namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 
 internal class ActionExecutingContextHelper
 {
-    internal static async Task<ActionExecutingContext> GetActionExecutingContext(List<ParameterModel>? parameters)
+    internal static async Task<ActionExecutingContext> GetActionExecutingContext<T>(List<ParameterModel<T>>? parameters)
     {
 
         var parameterDescriptors = parameters?.Select(x => new ParameterDescriptor
@@ -44,7 +44,7 @@ internal class ActionExecutingContextHelper
 
         var actionExecutingContext = new ActionExecutingContext(
             actionContext,
-            new List<IFilterMetadata>(),
+            [],
             actionArguments,
             controller
         );
@@ -53,7 +53,7 @@ internal class ActionExecutingContextHelper
         {
             var ctx = new ActionExecutedContext(
                 actionContext,
-                new List<IFilterMetadata>(),
+                [],
                 controller);
 
             return Task.FromResult(ctx);

@@ -8,9 +8,10 @@ public class FormParameterTests
     [Fact]
     public async void TestRequestWhenFormIsNull()
     {
-        var paramaters = new List<ParameterModel>
+        FakeInputModel? query = null;
+        var paramaters = new List<ParameterModel<FakeInputModel?>>
         {
-            new ParameterModel("model", BindingSource.Form, null)
+            new ParameterModel<FakeInputModel?>("model", BindingSource.Form, query)
         };
 
         var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
@@ -19,15 +20,15 @@ public class FormParameterTests
 
         Assert.False(actionExecutingContext.ModelState.IsValid);
 
-        Assert.True(actionExecutingContext.ModelState.First().Value?.Errors.First().ErrorMessage == "Form is null.");
+        Assert.True(actionExecutingContext.ModelState.First().Value?.Errors.First().ErrorMessage == "Form object is null.");
     }
 
     [Fact]
     public async void TestRequestWhenFormHasNonEmptyRequiredProperty()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<FakeInputModel>>
         {
-            new ParameterModel("model", BindingSource.Form, new FakeInputModel
+            new ParameterModel<FakeInputModel>("model", BindingSource.Form, new FakeInputModel
             {
                 SystemName = "test_1"
             })
@@ -43,9 +44,9 @@ public class FormParameterTests
     [Fact]
     public async void TestRequestWhenFormHasEmptyRequiredProperty()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<FakeInputModel>>
         {
-            new ParameterModel("model", BindingSource.Form, new FakeInputModel
+            new ParameterModel<FakeInputModel>("model", BindingSource.Form, new FakeInputModel
             {
                 SystemName = null
             })
@@ -69,9 +70,9 @@ public class FormParameterTests
     [Fact]
     public async void TestRequestWhenFormIsSystemType()
     {
-        var paramaters = new List<ParameterModel>
+        var paramaters = new List<ParameterModel<string>>
         {
-            new ParameterModel("model", BindingSource.Form, "test_1234")
+            new ParameterModel<string>("model", BindingSource.Form, "test_1234")
         };
 
         var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);

@@ -2,16 +2,16 @@
 
 namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 
-internal class ParameterModel
+internal class ParameterModel<T>
 {
     internal ParameterModel(string name, 
         BindingSource bindingSource, 
-        Object? value)
+        T value)
     {
         Name = name;
         BindingSource = bindingSource;
         Value = value;
-        Type = value?.GetType();
+        Type =typeof(T);
     }   
 
 
@@ -21,5 +21,5 @@ internal class ParameterModel
 
     public object? Value { get; }
 
-    public Type? Type { get; }
+    public Type Type { get; }
 }

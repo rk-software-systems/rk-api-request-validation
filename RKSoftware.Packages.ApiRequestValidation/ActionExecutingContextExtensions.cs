@@ -57,9 +57,10 @@ public static class ActionExecutingContextExtensions
         var parameters = context
             .ActionDescriptor
             .Parameters?
-            .Where(x => x.BindingInfo?.BindingSource == BindingSource.Body ||
-                        x.BindingInfo?.BindingSource == BindingSource.Form ||
-                        x.BindingInfo?.BindingSource == BindingSource.Query)
+            .Where(x => (x.BindingInfo?.BindingSource == BindingSource.Body ||
+                         x.BindingInfo?.BindingSource == BindingSource.Form ||
+                         x.BindingInfo?.BindingSource == BindingSource.Query) &&
+                        x.ParameterType.FullName?.StartsWith($"{nameof(System)}.", StringComparison.Ordinal) == false)
             .ToList();
 
         var flag = true;
@@ -69,10 +70,10 @@ public static class ActionExecutingContextExtensions
             {
                 if (!context.ActionArguments.TryGetValue(parameter.Name, out object? model) || model == null)
                 {
-                    context.ModelState.AddModelError("", $"{parameter.BindingInfo?.BindingSource?.Id} is null.");
+                    context.ModelState.AddModelError("", $"{parameter.BindingInfo?.BindingSource?.Id} object is null.");
                     flag = false;
                 }
-                else if (!(model.GetType().FullName?.StartsWith($"{nameof(System)}.", StringComparison.Ordinal)).GetValueOrDefault())
+                else
                 {
                     var validatorType = typeof(IValidator<>);
                     var genericType = validatorType.MakeGenericType(model.GetType());
