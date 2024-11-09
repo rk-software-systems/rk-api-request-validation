@@ -24,7 +24,7 @@ jobs:
         run: dotnet restore ./Tests/RKSoftware.Packages.ApiRequestValidation.Tests
 
       - name: Build
-        run: dotnet build ./Tests/RKSoftware.Packages.ApiRequestValidation.Tests --configuration Release --no-restore
+        run: dotnet build ./Tests/RKSoftware.Packages.ApiRequestValidation.Tests --configuration Release --no-restore -warnaserror
 
       - name: Test
         run: dotnet test ./Tests/RKSoftware.Packages.ApiRequestValidation.Tests --no-restore --verbosity normal
@@ -45,7 +45,7 @@ jobs:
         run: dotnet restore RKSoftware.Packages.ApiRequestValidation
 
       - name: Build
-        run: dotnet build RKSoftware.Packages.ApiRequestValidation --configuration Release --no-restore
+        run: dotnet build RKSoftware.Packages.ApiRequestValidation --configuration Release --no-restore -warnaserror
 
       - name: Push to NuGet repository
         run: dotnet nuget push ./RKSoftware.Packages.ApiRequestValidation/bin/Release/*.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json

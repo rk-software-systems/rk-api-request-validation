@@ -2,7 +2,7 @@
 
 namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 
-internal class FakeInputModelValidator : AbstractValidator<FakeInputModel>
+internal sealed class FakeInputModelValidator : AbstractValidator<FakeInputModel>
 {
     public const string SystemNameErrorMessage = "SystemName is required.";
 

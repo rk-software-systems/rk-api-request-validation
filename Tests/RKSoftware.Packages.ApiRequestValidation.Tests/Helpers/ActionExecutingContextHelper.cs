@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 
-internal class ActionExecutingContextHelper
+internal static class ActionExecutingContextHelper
 {
     internal static async Task<ActionExecutingContext> GetActionExecutingContext<T>(List<ParameterModel<T>>? parameters)
     {
@@ -39,8 +39,10 @@ internal class ActionExecutingContextHelper
             .Select(x => new { x.Name, x.Value })
             .ToDictionary(x => x.Name, y => y.Value) ?? [];
 
-        var controller = new FakeController();
-        controller.ControllerContext = new ControllerContext(actionContext);
+        var controller = new FakeController
+        {
+            ControllerContext = new ControllerContext(actionContext)
+        };
 
         var actionExecutingContext = new ActionExecutingContext(
             actionContext,

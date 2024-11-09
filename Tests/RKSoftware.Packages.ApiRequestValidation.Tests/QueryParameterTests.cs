@@ -7,7 +7,7 @@ namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 public class QueryParameterTests
 {
     [Fact]
-    public async void TestRequestWhenQueryIsNull()
+    public async Task TestRequestWhenQueryIsNull()
     {
         ParameterModel? query = null;
         var paramaters = new List<ParameterModel<ParameterModel?>>
@@ -25,7 +25,7 @@ public class QueryParameterTests
     }
 
     [Fact]
-    public async void TestRequestWhenQueryIsSystemTypeAndNull()
+    public async Task TestRequestWhenQueryIsSystemTypeAndNull()
     {
         int? query = null;
         var paramaters = new List<ParameterModel<int?>>
@@ -41,7 +41,7 @@ public class QueryParameterTests
     }
 
     [Fact]
-    public async void TestRequestWhenQueryHasNonEmptyRequiredProperty()
+    public async Task TestRequestWhenQueryHasNonEmptyRequiredProperty()
     {
         var paramaters = new List<ParameterModel<FakeInputModel>>
         {
@@ -59,7 +59,7 @@ public class QueryParameterTests
     }
 
     [Fact]
-    public async void TestRequestWhenQueryHasEmptyRequiredProperty()
+    public async Task TestRequestWhenQueryHasEmptyRequiredProperty()
     {
         var paramaters = new List<ParameterModel<FakeInputModel>>
         {
@@ -85,7 +85,7 @@ public class QueryParameterTests
     }
 
     [Fact]
-    public async void TestRequestWhenQueryIsSystemType()
+    public async Task TestRequestWhenQueryIsSystemType()
     {
         var paramaters = new List<ParameterModel<string>>
         {
@@ -98,7 +98,7 @@ public class QueryParameterTests
     }
 
     [Fact]
-    public async void TestRequestWhenQueryHasNonEmptyRequiredPropertyTogetherWithValidBody()
+    public async Task TestRequestWhenQueryHasNonEmptyRequiredPropertyTogetherWithValidBody()
     {
         var paramaters = new List<ParameterModel<FakeInputModel>>
         {
@@ -120,7 +120,7 @@ public class QueryParameterTests
     }
 
     [Fact]
-    public async void TestRequestWhenQueryHasEmptyRequiredPropertyTogetherWithValidBody()
+    public async Task TestRequestWhenQueryHasEmptyRequiredPropertyTogetherWithValidBody()
     {
         var paramaters = new List<ParameterModel<FakeInputModel>>
         {
@@ -150,7 +150,7 @@ public class QueryParameterTests
     }
 
     [Fact]
-    public async void TestRequestWhenQueryHasNonEmptyRequiredPropertyTogetherWithValidForm()
+    public async Task TestRequestWhenQueryHasNonEmptyRequiredPropertyTogetherWithValidForm()
     {
         var paramaters = new List<ParameterModel<FakeInputModel>>
         {
@@ -172,7 +172,7 @@ public class QueryParameterTests
     }
 
     [Fact]
-    public async void TestRequestWhenQueryHasEmptyRequiredPropertyTogetherWithValidForm()
+    public async Task TestRequestWhenQueryHasEmptyRequiredPropertyTogetherWithValidForm()
     {
         var paramaters = new List<ParameterModel<FakeInputModel>>
         {
