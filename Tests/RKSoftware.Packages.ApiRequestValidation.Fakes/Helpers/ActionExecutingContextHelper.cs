@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -7,13 +6,21 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Routing;
+using FluentValidation;
 
-namespace RKSoftware.Packages.ApiRequestValidation.Tests;
+namespace RKSoftware.Packages.ApiRequestValidation.Fakes;
 
-internal static class ActionExecutingContextHelper
+public static class ActionExecutingContextHelper
 {
-    internal static async Task<ActionExecutingContext> GetActionExecutingContext<T>(List<ParameterModel<T>>? parameters)
+    private static DefaultHttpContext _defaultHttpContext = GetDefaultHttpContext();
+
+
+    public static async Task<ActionExecutingContext> GetActionExecutingContext<T>(
+        List<ParameterModel<T>>? parameters,
+        IAsyncActionFilter apiRequestValidationAttribute)
     {
+
+        ArgumentNullException.ThrowIfNull(apiRequestValidationAttribute, nameof(apiRequestValidationAttribute));
 
         var parameterDescriptors = parameters?.Select(x => new ParameterDescriptor
         {
@@ -30,14 +37,14 @@ internal static class ActionExecutingContextHelper
             Parameters = parameterDescriptors ?? []
         };
 
-        var actionContext = new ActionContext(
-            GetDefaultHttpContext(),
-            new RouteData(),
-            actionDescriptor);
-
         var actionArguments = parameters?
             .Select(x => new { x.Name, x.Value })
             .ToDictionary(x => x.Name, y => y.Value) ?? [];
+
+        var actionContext = new ActionContext(
+            _defaultHttpContext,
+            new RouteData(),
+            actionDescriptor);
 
         var controller = new FakeController
         {
@@ -61,9 +68,7 @@ internal static class ActionExecutingContextHelper
             return Task.FromResult(ctx);
         }
 
-        var attribute = new ApiRequestValidationAttribute();
-
-        await attribute.OnActionExecutionAsync(actionExecutingContext, next);
+        await apiRequestValidationAttribute.OnActionExecutionAsync(actionExecutingContext, next);
 
         return actionExecutingContext;
     }
@@ -71,10 +76,12 @@ internal static class ActionExecutingContextHelper
     private static DefaultHttpContext GetDefaultHttpContext()
     {
         var services = new ServiceCollection();
-        services.AddScoped<IValidator<FakeInputModel>, FakeInputModelValidator>();
-        services.AddScoped<IValidator<FakeListModel>, FakeListModelValidator>();
-        services.AddScoped<IValidator<FakeListItemModel>, FakeListItemModelValidator>();
+
+        services.AddValidators();
+        //services.AddValidatorsFromAssemblyContaining<FakeInputModelValidator>();
+
         services.AddScoped<ICustomService, CustomService>();
+        services.AddScoped<IValidationProcessor, ValidationProcessor>();
         services.AddMvcCore();
         var serviceProvider = services.BuildServiceProvider();
         var httpContext = new DefaultHttpContext

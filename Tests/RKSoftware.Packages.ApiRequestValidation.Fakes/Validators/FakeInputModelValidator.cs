@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 
-namespace RKSoftware.Packages.ApiRequestValidation.Tests;
+namespace RKSoftware.Packages.ApiRequestValidation.Fakes;
 
-internal sealed class FakeInputModelValidator : AbstractValidator<FakeInputModel>
+public class FakeInputModelValidator : FluentValidation.AbstractValidator<FakeInputModel>
 {
     public const string SystemNameErrorMessage = "SystemName is required.";
 
@@ -12,6 +12,6 @@ internal sealed class FakeInputModelValidator : AbstractValidator<FakeInputModel
 
         RuleFor(x => x.SystemName)
             .NotEmpty()
-            .WithMessage(SystemNameErrorMessage);
+            .WithMessage(SystemNameErrorMessage);        
     }
 }

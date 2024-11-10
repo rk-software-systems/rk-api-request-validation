@@ -1,11 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using RKSoftware.Packages.ApiRequestValidation.Fakes;
 
 namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 
 public class QueryParameterTests
 {
+    private readonly IAsyncActionFilter _filter = new ApiRequestValidationAttribute();
+
     [Fact]
     public async Task TestRequestWhenQueryIsNull()
     {
@@ -15,7 +19,7 @@ public class QueryParameterTests
             new("model", BindingSource.Query, query)
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
 
@@ -33,7 +37,7 @@ public class QueryParameterTests
             new("model", BindingSource.Query, query)
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.True(actionExecutingContext.ModelState.IsValid);
 
@@ -51,7 +55,7 @@ public class QueryParameterTests
             })
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.Null(actionExecutingContext.Result);
 
@@ -69,7 +73,7 @@ public class QueryParameterTests
             })
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
 
@@ -92,7 +96,7 @@ public class QueryParameterTests
             new("model", BindingSource.Query, "test_1234")
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.Null(actionExecutingContext.Result);
     }
@@ -112,7 +116,7 @@ public class QueryParameterTests
             })
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.Null(actionExecutingContext.Result);
 
@@ -134,7 +138,7 @@ public class QueryParameterTests
             })
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
 
@@ -164,7 +168,7 @@ public class QueryParameterTests
             })
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.Null(actionExecutingContext.Result);
 
@@ -186,7 +190,7 @@ public class QueryParameterTests
             })
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
 

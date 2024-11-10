@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace RKSoftware.Packages.ApiRequestValidation.Tests;
+namespace RKSoftware.Packages.ApiRequestValidation.Fakes;
 
-internal sealed class ParameterModel<T>
+public class ParameterModel<T>
 {
-    internal ParameterModel(string name, 
+    public ParameterModel(
+        string name, 
         BindingSource bindingSource, 
         T value)
     {

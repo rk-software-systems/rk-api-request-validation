@@ -1,7 +1,8 @@
 ﻿using FluentValidation;
 
-namespace RKSoftware.Packages.ApiRequestValidation.Tests;
-internal sealed class FakeListModelValidator : AbstractValidator<FakeListModel>
+namespace RKSoftware.Packages.ApiRequestValidation.Fakes;
+
+public class FakeListModelValidator : AbstractValidator<FakeListModel>
 {
     public const string ItemsErrorMessage = "Items is required.";
 

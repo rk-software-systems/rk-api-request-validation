@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using RKSoftware.Packages.ApiRequestValidation.Fakes;
 
 namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 public class BodyWithListParameterTest
 {
+    private readonly IAsyncActionFilter _filter = new ApiRequestValidationAttribute();
+
     [Fact]
     public async Task TestRequestWhenBodyHasNonEmptyRequiredProperty()
     {
@@ -21,7 +25,7 @@ public class BodyWithListParameterTest
             })
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.Null(actionExecutingContext.Result);
 
@@ -39,7 +43,7 @@ public class BodyWithListParameterTest
             })
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
 
@@ -71,7 +75,7 @@ public class BodyWithListParameterTest
             })
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
 

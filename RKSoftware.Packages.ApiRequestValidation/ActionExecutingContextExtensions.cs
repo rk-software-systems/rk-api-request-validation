@@ -2,6 +2,7 @@
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace RKSoftware.Packages.ApiRequestValidation;
 
@@ -84,7 +85,7 @@ public static class ActionExecutingContextExtensions
                         var validateMethod = genericType.GetMethod(nameof(IValidator.ValidateAsync));
                         if (validateMethod != null)
                         {
-                            var validationResultTask = (Task<ValidationResult>?)validateMethod.Invoke(validator, new object[] { model, cancellation });
+                            var validationResultTask = (Task<ValidationResult>?)validateMethod.Invoke(validator, [model, cancellation]);
                             if (validationResultTask != null)
                             {
                                 var validationResult = await validationResultTask;
@@ -96,6 +97,60 @@ public static class ActionExecutingContextExtensions
                                     }
                                     flag = false;
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return flag;
+    }
+
+    /// <summary>
+    /// Validate API request body or form by using fluent validation validators.
+    /// </summary>
+    /// <param name="context">A context for action filters.</param>
+    /// <param name="cancellation">Propagates notification that operations should be canceled.</param>
+    /// <returns>Returns true, if API request body or form is valid.</returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    public static async Task<bool> AreBodyFormAndQueryModelsValid2(this ActionExecutingContext context, CancellationToken cancellation = new CancellationToken())
+    {
+        ArgumentNullException.ThrowIfNull(context, nameof(context));
+
+        var parameters = context
+            .ActionDescriptor
+            .Parameters?
+            .Where(x => (x.BindingInfo?.BindingSource == BindingSource.Body ||
+                         x.BindingInfo?.BindingSource == BindingSource.Form ||
+                         x.BindingInfo?.BindingSource == BindingSource.Query) &&
+                        x.ParameterType.FullName?.StartsWith($"{nameof(System)}.", StringComparison.Ordinal) == false)
+            .ToList();
+
+        var flag = true;
+        if (parameters != null)
+        {
+            foreach (var parameter in parameters)
+            {
+                if (!context.ActionArguments.TryGetValue(parameter.Name, out object? model) || model == null)
+                {
+                    context.ModelState.AddModelError("", $"{parameter.BindingInfo?.BindingSource?.Id} object is null.");
+                    flag = false;
+                }
+                else
+                {
+                    var validatorProcessor = context.HttpContext.RequestServices.GetService<IValidationProcessor>();
+                    if (validatorProcessor != null)
+                    {
+                        var validationResult = await validatorProcessor.Validate(model.GetType()!.FullName!, model);
+                        if (validationResult != null)
+                        {
+                            if (!validationResult.IsValid)
+                            {
+                                foreach (var error in validationResult.Errors)
+                                {
+                                    context.ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+                                }
+                                flag = false;
                             }
                         }
                     }

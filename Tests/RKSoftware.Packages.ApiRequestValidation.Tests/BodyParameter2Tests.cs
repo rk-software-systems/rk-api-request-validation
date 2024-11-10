@@ -5,15 +5,15 @@ using RKSoftware.Packages.ApiRequestValidation.Fakes;
 
 namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 
-public class BodyParameterTests
+public class BodyParameter2Tests
 {
-    private readonly IAsyncActionFilter _filter = new ApiRequestValidationAttribute();
+    private readonly IAsyncActionFilter _filter = new ApiRequestValidation2Attribute();
 
     [Fact]
     public async Task TestRequestWhenBodyIsNull()
     {
-        FakeInputModel? body = null;
-        var paramaters = new List<ParameterModel<FakeInputModel?>>
+        FakeGodInputModel? body = null;
+        var paramaters = new List<ParameterModel<FakeGodInputModel?>>
         {
             new("model", BindingSource.Body, body)
         };
@@ -30,9 +30,9 @@ public class BodyParameterTests
     [Fact]
     public async Task TestRequestWhenBodyHasNonEmptyRequiredProperty()
     {
-        var paramaters = new List<ParameterModel<FakeInputModel>>
+        var paramaters = new List<ParameterModel<FakeGodInputModel>>
         {
-            new("model", BindingSource.Body, new FakeInputModel
+            new("model", BindingSource.Body, new FakeGodInputModel
             {
                 SystemName = "test_1"
             })
@@ -48,9 +48,9 @@ public class BodyParameterTests
     [Fact]
     public async Task TestRequestWhenBodyHasEmptyRequiredProperty()
     {
-        var paramaters = new List<ParameterModel<FakeInputModel>>
+        var paramaters = new List<ParameterModel<FakeGodInputModel>>
         {
-            new("model", BindingSource.Body, new FakeInputModel
+            new("model", BindingSource.Body, new FakeGodInputModel
             {
                 SystemName = null
             })

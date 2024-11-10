@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 
-namespace RKSoftware.Packages.ApiRequestValidation.Tests;
-internal sealed class FakeListItemModelValidator : AbstractValidator<FakeListItemModel>
+namespace RKSoftware.Packages.ApiRequestValidation.Fakes;
+public class FakeListItemModelValidator : AbstractValidator<FakeListItemModel>
 {
     public const string SystemNameErrorMessage = "SystemName is required.";
 

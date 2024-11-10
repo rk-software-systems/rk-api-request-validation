@@ -1,10 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using RKSoftware.Packages.ApiRequestValidation.Fakes;
 
 namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 
 public class FormParameterTests
 {
+    private readonly IAsyncActionFilter _filter = new ApiRequestValidationAttribute();
+
+
     [Fact]
     public async Task TestRequestWhenFormIsNull()
     {
@@ -14,7 +19,7 @@ public class FormParameterTests
             new ParameterModel<FakeInputModel?>("model", BindingSource.Form, query)
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
 
@@ -34,7 +39,7 @@ public class FormParameterTests
             })
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.Null(actionExecutingContext.Result);
 
@@ -52,7 +57,7 @@ public class FormParameterTests
             })
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.IsType<BadRequestObjectResult>(actionExecutingContext.Result);
 
@@ -75,7 +80,7 @@ public class FormParameterTests
             new ParameterModel<string>("model", BindingSource.Form, "test_1234")
         };
 
-        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters);
+        var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext(paramaters, _filter);
 
         Assert.Null(actionExecutingContext.Result);
     }
