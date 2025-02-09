@@ -9,7 +9,7 @@ namespace RKSoftware.Packages.ApiRequestValidation;
 /// Returns ValidationProblem, if API request body or form is not valid.
 /// </summary>
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public sealed class ApiRequestValidation2Attribute : Attribute, IAsyncActionFilter
+public sealed class ApiRequestValidationSgAttribute : Attribute, IAsyncActionFilter
 {
     /// <summary>
     /// Validate API request path parameters, body and form.
@@ -27,7 +27,7 @@ public sealed class ApiRequestValidation2Attribute : Attribute, IAsyncActionFilt
         {
             context.Result = ((ControllerBase)context.Controller).NotFound();
         }
-        else if (!await context.AreBodyFormAndQueryModelsValid2())
+        else if (!await context.AreBodyFormAndQueryModelsValidSg())
         {
             context.Result = ((ControllerBase)context.Controller).ValidationProblem();
         }

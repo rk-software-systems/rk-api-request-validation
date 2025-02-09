@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
     <ProjectReference Include="..\..\RKSoftware.Packages.ApiRequestValidation.SourceGenerator\RKSoftware.Packages.ApiRequestValidation.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     <ProjectReference Include="..\..\RKSoftware.Packages.ApiRequestValidation\RKSoftware.Packages.ApiRequestValidation.csproj" />
   </ItemGroup>

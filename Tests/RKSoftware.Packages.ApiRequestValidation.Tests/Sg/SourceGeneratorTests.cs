@@ -5,7 +5,7 @@ using RKSoftware.Packages.ApiRequestValidation.SourceGenerator;
 using System.Collections.Concurrent;
 using System.Reflection;
 
-namespace RKSoftware.Packages.ApiRequestValidation.Tests;
+namespace RKSoftware.Packages.ApiRequestValidation.Tests.Sg;
 
 public class SourceGeneratorTests
 {

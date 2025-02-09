@@ -4,14 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RKSoftware.Packages.ApiRequestValidation.Fakes;
 
-public class ValidationProcessor : IValidationProcessor
+public class ValidationProcessor(IServiceProvider serviceProvider) : IValidationProcessor
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public ValidationProcessor(IServiceProvider serviceProvider)
-    {
-        _serviceProvider = serviceProvider;
-    }
+    private readonly IServiceProvider _serviceProvider = serviceProvider;
 
     public async Task<ValidationResult?> Validate(string classNameToValidate, object obj)
     {
@@ -33,6 +28,14 @@ public class ValidationProcessor : IValidationProcessor
                 }
                 var m2 = (FakeGodInputModel)obj;
                 return await val2.ValidateAsync(m2);
+            case "RKSoftware.Packages.ApiRequestValidation.Fakes.FakeGodInputStructModel":
+                var val3 = _serviceProvider.GetService<IValidator<FakeGodInputStructModel>>();
+                if (val3 == null)
+                {
+                    return null;
+                }
+                var m3 = (FakeGodInputStructModel)obj;
+                return await val3.ValidateAsync(m3);
             default:
                 return null;
         }

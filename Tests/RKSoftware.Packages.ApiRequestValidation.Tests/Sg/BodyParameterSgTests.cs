@@ -3,17 +3,17 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using RKSoftware.Packages.ApiRequestValidation.Fakes;
 
-namespace RKSoftware.Packages.ApiRequestValidation.Tests;
+namespace RKSoftware.Packages.ApiRequestValidation.Tests.Sg;
 
-public class BodyParameter2Tests
+public class BodyParameterSgTests
 {
-    private readonly IAsyncActionFilter _filter = new ApiRequestValidation2Attribute();
+    private readonly IAsyncActionFilter _filter = new ApiRequestValidationSgAttribute();
 
     [Fact]
     public async Task TestRequestWhenBodyIsNull()
     {
         FakeGodInputModel? body = null;
-        var paramaters = new List<ParameterModel<FakeGodInputModel?>>
+        var paramaters = new List<ParameterModel<FakeGodInputModel>>
         {
             new("model", BindingSource.Body, body)
         };

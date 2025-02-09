@@ -12,9 +12,6 @@ namespace RKSoftware.Packages.ApiRequestValidation.Fakes;
 
 public static class ActionExecutingContextHelper
 {
-    private static DefaultHttpContext _defaultHttpContext = GetDefaultHttpContext();
-
-
     public static async Task<ActionExecutingContext> GetActionExecutingContext<T>(
         List<ParameterModel<T>>? parameters,
         IAsyncActionFilter apiRequestValidationAttribute)
@@ -42,7 +39,65 @@ public static class ActionExecutingContextHelper
             .ToDictionary(x => x.Name, y => y.Value) ?? [];
 
         var actionContext = new ActionContext(
-            _defaultHttpContext,
+            GetDefaultHttpContext(),
+            new RouteData(),
+            actionDescriptor);
+
+        var controller = new FakeController
+        {
+            ControllerContext = new ControllerContext(actionContext)
+        };
+
+        var actionExecutingContext = new ActionExecutingContext(
+            actionContext,
+            [],
+            actionArguments,
+            controller
+        );
+
+        Task<ActionExecutedContext> next()
+        {
+            var ctx = new ActionExecutedContext(
+                actionContext,
+                [],
+                controller);
+
+            return Task.FromResult(ctx);
+        }
+
+        await apiRequestValidationAttribute.OnActionExecutionAsync(actionExecutingContext, next);
+
+        return actionExecutingContext;
+    }
+
+    public static async Task<ActionExecutingContext> GetActionExecutingContextSg<T>(
+        List<ParameterModel<T>>? parameters,
+        IAsyncActionFilter apiRequestValidationAttribute)
+    {
+
+        ArgumentNullException.ThrowIfNull(apiRequestValidationAttribute, nameof(apiRequestValidationAttribute));
+
+        var parameterDescriptors = parameters?.Select(x => new ParameterDescriptor
+        {
+            Name = x.Name,
+            BindingInfo = new BindingInfo
+            {
+                BindingSource = x.BindingSource
+            },
+            ParameterType = x.Type,
+        }).ToList();
+
+        var actionDescriptor = new ControllerActionDescriptor
+        {
+            Parameters = parameterDescriptors ?? []
+        };
+
+        var actionArguments = parameters?
+            .Select(x => new { x.Name, x.Value })
+            .ToDictionary(x => x.Name, y => y.Value) ?? [];
+
+        var actionContext = new ActionContext(
+            GetDefaultHttpContextSg(),
             new RouteData(),
             actionDescriptor);
 
@@ -77,8 +132,23 @@ public static class ActionExecutingContextHelper
     {
         var services = new ServiceCollection();
 
+        services.AddValidatorsFromAssemblyContaining<FakeInputModelValidator>();
+
+        services.AddScoped<ICustomService, CustomService>();
+        services.AddMvcCore();
+        var serviceProvider = services.BuildServiceProvider();
+        var httpContext = new DefaultHttpContext
+        {
+            RequestServices = serviceProvider
+        };
+        return httpContext;
+    }
+
+    private static DefaultHttpContext GetDefaultHttpContextSg()
+    {
+        var services = new ServiceCollection();
+
         services.AddValidators();
-        //services.AddValidatorsFromAssemblyContaining<FakeInputModelValidator>();
 
         services.AddScoped<ICustomService, CustomService>();
         services.AddScoped<IValidationProcessor, ValidationProcessor>();

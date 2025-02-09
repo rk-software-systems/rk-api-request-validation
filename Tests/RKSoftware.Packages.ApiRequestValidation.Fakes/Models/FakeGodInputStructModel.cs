@@ -1,7 +1,11 @@
 ﻿namespace RKSoftware.Packages.ApiRequestValidation.Fakes;
 
-public class FakeGodInputModel
+public struct FakeGodInputStructModel
 {
+    public FakeGodInputStructModel()
+    {        
+    }
+
     public string? SystemName { get; set; }
 
     public string? CustomProperty { get; set; }

@@ -113,7 +113,7 @@ public static class ActionExecutingContextExtensions
     /// <param name="cancellation">Propagates notification that operations should be canceled.</param>
     /// <returns>Returns true, if API request body or form is valid.</returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public static async Task<bool> AreBodyFormAndQueryModelsValid2(this ActionExecutingContext context, CancellationToken cancellation = new CancellationToken())
+    public static async Task<bool> AreBodyFormAndQueryModelsValidSg(this ActionExecutingContext context, CancellationToken cancellation = new CancellationToken())
     {
         ArgumentNullException.ThrowIfNull(context, nameof(context));
 
@@ -141,7 +141,7 @@ public static class ActionExecutingContextExtensions
                     var validatorProcessor = context.HttpContext.RequestServices.GetService<IValidationProcessor>();
                     if (validatorProcessor != null)
                     {
-                        var validationResult = await validatorProcessor.Validate(model.GetType()!.FullName!, model);
+                        var validationResult = await validatorProcessor.Validate(parameter.ParameterType.FullName!, model);
                         if (validationResult != null)
                         {
                             if (!validationResult.IsValid)
