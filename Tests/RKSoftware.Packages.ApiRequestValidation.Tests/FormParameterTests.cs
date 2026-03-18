@@ -6,7 +6,7 @@ namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 public class FormParameterTests
 {
     [Fact]
-    public async void TestRequestWhenFormIsNull()
+    public async Task TestRequestWhenFormIsNull()
     {
         FakeInputModel? query = null;
         var paramaters = new List<ParameterModel<FakeInputModel?>>
@@ -24,7 +24,7 @@ public class FormParameterTests
     }
 
     [Fact]
-    public async void TestRequestWhenFormHasNonEmptyRequiredProperty()
+    public async Task TestRequestWhenFormHasNonEmptyRequiredProperty()
     {
         var paramaters = new List<ParameterModel<FakeInputModel>>
         {
@@ -42,7 +42,7 @@ public class FormParameterTests
     }
 
     [Fact]
-    public async void TestRequestWhenFormHasEmptyRequiredProperty()
+    public async Task TestRequestWhenFormHasEmptyRequiredProperty()
     {
         var paramaters = new List<ParameterModel<FakeInputModel>>
         {
@@ -68,7 +68,7 @@ public class FormParameterTests
     }
 
     [Fact]
-    public async void TestRequestWhenFormIsSystemType()
+    public async Task TestRequestWhenFormIsSystemType()
     {
         var paramaters = new List<ParameterModel<string>>
         {
