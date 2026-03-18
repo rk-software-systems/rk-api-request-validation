@@ -5,7 +5,7 @@ namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 public class BodyWithListParameterTest
 {
     [Fact]
-    public async void TestRequestWhenBodyHasNonEmptyRequiredProperty()
+    public async Task TestRequestWhenBodyHasNonEmptyRequiredProperty()
     {
         var paramaters = new List<ParameterModel<FakeListModel>>
         {
@@ -29,7 +29,7 @@ public class BodyWithListParameterTest
     }
 
     [Fact]
-    public async void TestRequestWhenBodyHasEmptyRequiredProperty()
+    public async Task TestRequestWhenBodyHasEmptyRequiredProperty()
     {
         var paramaters = new List<ParameterModel<FakeListModel>>
         {
@@ -55,7 +55,7 @@ public class BodyWithListParameterTest
     }
 
     [Fact]
-    public async void TestRequestWhenBodyHasEmptyRequiredChildProperty()
+    public async Task TestRequestWhenBodyHasEmptyRequiredChildProperty()
     {
         var paramaters = new List<ParameterModel<FakeListModel>>
         {

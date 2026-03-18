@@ -1,6 +1,6 @@
 ﻿namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 
-internal class FakeListModel
+internal sealed class FakeListModel
 {
     public List<FakeListItemModel>? Items { get; set; }
 }

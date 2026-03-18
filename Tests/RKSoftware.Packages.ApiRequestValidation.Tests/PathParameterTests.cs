@@ -6,7 +6,7 @@ namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 public class PathParameterTests
 {
     [Fact]
-    public async void TestRequestWithoutPathParameter()
+    public async Task TestRequestWithoutPathParameter()
     {
         var actionExecutingContext = await ActionExecutingContextHelper.GetActionExecutingContext<object>(null);
 
@@ -14,7 +14,7 @@ public class PathParameterTests
     }
 
     [Fact]
-    public async void TestRequestWithPathParameter()
+    public async Task TestRequestWithPathParameter()
     {
         var paramaters = new List<ParameterModel<string>>
         {
@@ -28,7 +28,7 @@ public class PathParameterTests
     }
 
     [Fact]
-    public async void TestRequestWithTwoPathParameters()
+    public async Task TestRequestWithTwoPathParameters()
     {
         var paramaters = new List<ParameterModel<string>>
         {
@@ -42,7 +42,7 @@ public class PathParameterTests
     }
 
     [Fact]
-    public async void TestRequestWithNullInPathParameter()
+    public async Task TestRequestWithNullInPathParameter()
     {
         var paramaters = new List<ParameterModel<string?>>
         {
@@ -55,7 +55,7 @@ public class PathParameterTests
     }
 
     [Fact]
-    public async void TestRequestWithNullInOneOfTwoPathParameters()
+    public async Task TestRequestWithNullInOneOfTwoPathParameters()
     {
         var paramaters = new List<ParameterModel<string?>>
         {

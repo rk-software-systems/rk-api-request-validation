@@ -3,4 +3,4 @@
 namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 
 [ApiController]
-internal class FakeController : ControllerBase { }
+internal sealed class FakeController : ControllerBase { }

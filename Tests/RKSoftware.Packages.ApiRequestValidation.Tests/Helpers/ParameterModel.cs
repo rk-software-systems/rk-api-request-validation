@@ -2,7 +2,7 @@
 
 namespace RKSoftware.Packages.ApiRequestValidation.Tests;
 
-internal class ParameterModel<T>
+internal sealed class ParameterModel<T>
 {
     internal ParameterModel(string name, 
         BindingSource bindingSource, 
