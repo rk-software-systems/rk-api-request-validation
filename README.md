@@ -1,8 +1,8 @@
 # Automatic validation for API request parameters (.NET)
 Repository contains functionality for validation API requests.
 
-| Package  |  Current version and Downloads
-|---|---|
+| Package  |  Version | Information
+|----------|----------|--------------
 |  RKSoftware.Packages.ApiRequestValidation  | ![NuGet](https://img.shields.io/nuget/v/RKSoftware.Packages.ApiRequestValidation) | [![CI](https://github.com/rk-software-systems/rk-api-request-validation/actions/workflows/ci.yml/badge.svg)](https://github.com/rk-software-systems/rk-api-request-validation/actions/workflows/ci.yml)
 
 ## About
